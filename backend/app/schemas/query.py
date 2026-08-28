@@ -19,9 +19,11 @@ class QueryRequest(BaseModel):
 class CitationOut(BaseModel):
     index: int
     chunk_id: str
-    document_id: str
+    document_id: str | None
     filename: str
     page: int | None
+    origin: str = "vector"
+    url: str | None = None
 
     @classmethod
     def from_citation(cls, c: Citation) -> "CitationOut":
@@ -31,17 +33,21 @@ class CitationOut(BaseModel):
             document_id=c.document_id,
             filename=c.filename,
             page=c.page,
+            origin=c.origin,
+            url=c.url,
         )
 
 
 class SourceOut(BaseModel):
     index: int
     chunk_id: str
-    document_id: str
+    document_id: str | None
     filename: str
     page: int | None
     score: float
     snippet: str
+    origin: str = "vector"
+    url: str | None = None
 
     @classmethod
     def from_passage(cls, p: ContextPassage) -> "SourceOut":
@@ -54,6 +60,8 @@ class SourceOut(BaseModel):
             page=p.page,
             score=p.score,
             snippet=snippet,
+            origin=p.origin,
+            url=p.url,
         )
 
 

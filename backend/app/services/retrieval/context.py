@@ -16,11 +16,13 @@ from app.services.vector_store import SearchResult
 class ContextPassage(BaseModel):
     index: int  # 1-based citation number
     chunk_id: str
-    document_id: str
+    document_id: str | None
     filename: str
     page: int | None
     text: str
     score: float
+    origin: str = "vector"  # "vector" | "web"
+    url: str | None = None
 
     def citation_label(self) -> str:
         if self.page is not None:

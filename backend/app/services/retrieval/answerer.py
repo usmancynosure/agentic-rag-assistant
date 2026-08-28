@@ -32,9 +32,11 @@ _CITATION_RE = re.compile(r"\[(\d+)\]")
 class Citation(BaseModel):
     index: int
     chunk_id: str
-    document_id: str
+    document_id: str | None
     filename: str
     page: int | None
+    origin: str = "vector"
+    url: str | None = None
 
     @classmethod
     def from_passage(cls, p: ContextPassage) -> "Citation":
@@ -44,6 +46,8 @@ class Citation(BaseModel):
             document_id=p.document_id,
             filename=p.filename,
             page=p.page,
+            origin=p.origin,
+            url=p.url,
         )
 
 
