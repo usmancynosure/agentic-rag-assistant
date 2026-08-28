@@ -13,6 +13,9 @@ from app.core.config import Settings, get_settings
 from app.services.document_store import DocumentStore
 from app.services.ingestion.embeddings import Embedder, VoyageEmbeddings
 from app.services.ingestion.service import IngestionService
+from app.services.llm import AnthropicLLM, LLMClient
+from app.services.retrieval.answerer import Answerer
+from app.services.retrieval.query_service import QueryService
 from app.services.vector_store import PineconeVectorStore, VectorStore
 
 
@@ -44,5 +47,24 @@ def get_ingestion_service() -> IngestionService:
         embedder=get_embedder(),
         vector_store=get_vector_store(),
         document_store=get_document_store(),
+        settings=get_settings(),
+    )
+
+
+@lru_cache
+def get_llm() -> LLMClient:
+    s: Settings = get_settings()
+    return AnthropicLLM(api_key=s.anthropic_api_key, model=s.claude_model)
+
+
+def get_answerer() -> Answerer:
+    return Answerer(llm=get_llm(), max_tokens=get_settings().claude_max_tokens)
+
+
+def get_query_service() -> QueryService:
+    return QueryService(
+        embedder=get_embedder(),
+        vector_store=get_vector_store(),
+        answerer=get_answerer(),
         settings=get_settings(),
     )
