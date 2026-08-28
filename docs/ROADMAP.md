@@ -77,17 +77,20 @@ Each phase is independently shippable, testable, and demoable. A phase is "done"
 
 ---
 
-## Phase 4 — Verification & Citations
+## Phase 4 — Verification & Citations ✅
 
 **Goal:** trust. Catch hallucinations; guarantee citations map to real sources.
 
-- [ ] Grounding check: each claim ↔ supporting chunk (LLM-as-judge)
-- [ ] Citation validation: cited spans exist in retrieved context
-- [ ] Confidence scoring + "insufficient evidence" path
-- [ ] Optional self-correction re-query on low grounding
-- [ ] Tests: adversarial hallucination cases, citation integrity
+- [x] Grounding check: claims ↔ supporting sources (LLM-as-judge) *(4a)*
+- [x] Citation validation: valid indices, coverage, uncited-claim detection *(4b)*
+- [x] Confidence scoring + verdict + trustworthy flag; opt-in `verify` on `/query` and `/agent/query` *(4c)*
+- [x] "Insufficient evidence" path (Phase 2) treated as fully grounded (correct declining)
+- [x] Tests: hallucination detection, citation integrity, confidence math, wired endpoints *(110 tests)*
+- [ ] Automatic self-correction re-query on low grounding *(deferred; agent already re-queries on no-citation)*
 
-**Demo:** an unanswerable question returns "insufficient evidence" instead of a made-up answer.
+**Delivered as chunks:** 4a grounding judge · 4b citation validator · 4c verification service + API wiring.
+
+**Demo:** ask something the corpus can't support → "insufficient evidence"; ask with `verify: true` → a hallucinated claim is flagged `trustworthy: false`.
 
 ---
 

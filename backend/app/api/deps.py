@@ -22,6 +22,8 @@ from app.services.llm import AnthropicLLM, LLMClient
 from app.services.retrieval.answerer import Answerer
 from app.services.retrieval.query_service import QueryService
 from app.services.vector_store import PineconeVectorStore, VectorStore
+from app.services.verification.grounding import GroundingVerifier
+from app.services.verification.service import VerificationService
 
 
 @lru_cache
@@ -99,3 +101,7 @@ def get_orchestrator() -> AgentOrchestrator:
         answerer=get_answerer(),
         settings=get_settings(),
     )
+
+
+def get_verification_service() -> VerificationService:
+    return VerificationService(grounding_verifier=GroundingVerifier(llm=get_llm()))

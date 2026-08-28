@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, Field
 
+from app.schemas.verification import VerificationOut
 from app.services.retrieval.answerer import Citation
 from app.services.retrieval.context import ContextPassage
 
@@ -14,6 +15,7 @@ class QueryRequest(BaseModel):
     question: str = Field(min_length=1)
     document_id: str | None = None  # optional scope to a single document
     top_k: int | None = None
+    verify: bool = False  # opt-in grounding + citation verification
 
 
 class CitationOut(BaseModel):
@@ -69,3 +71,4 @@ class QueryResponse(BaseModel):
     answer: str
     citations: list[CitationOut]
     sources: list[SourceOut]
+    verification: VerificationOut | None = None
