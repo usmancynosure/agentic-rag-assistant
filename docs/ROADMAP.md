@@ -94,18 +94,20 @@ Each phase is independently shippable, testable, and demoable. A phase is "done"
 
 ---
 
-## Phase 5 — Frontend (Next.js)
+## Phase 5 — Frontend (Next.js) 🚧
 
 **Goal:** a polished chat UI.
 
-- [ ] Next.js 14 App Router + Tailwind
-- [ ] Streaming chat with token rendering
-- [ ] Source/citation panel (click to view chunk)
-- [ ] Document upload + management UI
-- [ ] Agent "reasoning steps" / trace view
-- [ ] Env-based API client, error/loading states
+- [x] Next.js 14 App Router + Tailwind + glassmorphism design system *(5a)*
+- [x] Document upload + management UI (drawer) *(5b)*
+- [x] Chat wired to `/agent/query`; answers-on-top / composer-docked layout *(5c)*
+- [x] Source/citation panel + agent "reasoning steps" (tools + passes) trace view *(5c)*
+- [x] Verification/trust badge; env-based API client, error/loading states *(5c)*
+- [ ] Streaming chat with token rendering *(5d — deferred; agent endpoint is not SSE yet)*
 
-**Demo:** end-to-end chat with visible citations and upload.
+**Delivered as chunks:** 5a scaffold+design · 5b documents drawer · 5c chat + citations + trace + verification.
+
+**Demo:** open Documents → upload → ask → grounded, cited, verified answer with the agent's tool trace.
 
 ---
 

@@ -52,16 +52,38 @@ agentic-rag-assistant/
 
 ## Getting started
 
-See [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) for full setup. Quick version:
+See [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) for full setup. Run both services:
+
+**1) Backend (terminal 1)**
 
 ```bash
 cd backend
-cp .env.example .env          # fill in ANTHROPIC_API_KEY, PINECONE_API_KEY, VOYAGE_API_KEY
-python -m venv .venv && source .venv/bin/activate
+cp .env.example .env          # fill in ANTHROPIC_API_KEY, VOYAGE_API_KEY, PINECONE_API_KEY (TAVILY_API_KEY optional)
+python3.12 -m venv .venv && source .venv/bin/activate   # use 3.11 or 3.12 — see note below
 pip install -e ".[dev]"
 uvicorn app.main:app --reload
-# open http://localhost:8000/docs
+# http://localhost:8000/docs   ·   health: http://localhost:8000/api/v1/health
 ```
+
+**2) Frontend (terminal 2)**
+
+```bash
+cd frontend
+cp .env.local.example .env.local    # NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+npm install
+npm run dev                          # http://localhost:3000
+```
+
+Then: open **Documents** (top-right) → upload a PDF/DOCX/TXT/MD → ask a question. Toggle **Verify** in the composer to run the grounding + citation check.
+
+> **Python version note:** this repo targets **Python 3.11–3.12**. Some deps
+> (tiktoken, pinecone, tokenizers) may not yet ship wheels for 3.14, so
+> `pip install` can fail there. If you only have 3.14, install 3.12
+> (`brew install python@3.12`) and create the venv with `python3.12`.
+
+Without real API keys the app still boots (`/api/v1/health` is green and
+`/ready` reports which keys are missing), but answering a question needs
+Anthropic + Voyage + Pinecone configured.
 
 ## Phased delivery
 
