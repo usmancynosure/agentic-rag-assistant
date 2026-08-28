@@ -22,18 +22,20 @@ Each phase is independently shippable, testable, and demoable. A phase is "done"
 
 ---
 
-## Phase 1 — Ingestion Pipeline
+## Phase 1 — Ingestion Pipeline ✅
 
 **Goal:** turn raw documents into searchable vectors.
 
-- [ ] `POST /documents` upload (PDF, DOCX, TXT, MD) with validation
-- [ ] Parsers per file type → normalized text + metadata
-- [ ] Chunking (recursive, token-aware, with overlap) + chunk metadata (source, page, offsets)
-- [ ] Embeddings via Voyage (`voyage-3`), batched
-- [ ] Upsert to Pinecone with metadata; idempotent by content hash
-- [ ] `GET /documents`, `DELETE /documents/{id}`
-- [ ] Background task / job status for large files
-- [ ] Tests: parser fixtures, chunker boundaries, mocked embed+upsert
+- [x] `POST /documents` upload (PDF, DOCX, TXT, MD) with validation *(1f)*
+- [x] Parsers per file type → normalized text + metadata *(1b)*
+- [x] Chunking (recursive, token-aware, with overlap) + chunk metadata (source, page, offsets) *(1c)*
+- [x] Embeddings via Voyage (`voyage-3`), batched *(1d)*
+- [x] Upsert to Pinecone with metadata; idempotent by content hash *(1e, 1f)*
+- [x] `GET /documents`, `GET /documents/{id}`, `DELETE /documents/{id}` *(1f)*
+- [x] Tests: models, parsers, chunker, embeddings, vector store, API *(40 tests)*
+- [ ] Background task / job status for large files *(deferred to Phase 6)*
+
+**Delivered as chunks:** 1a models · 1b parsers · 1c chunker · 1d embeddings · 1e vector store · 1f service + API.
 
 **Demo:** upload a PDF, see chunks appear in Pinecone, list & delete it.
 
