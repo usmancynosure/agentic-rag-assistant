@@ -1,0 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800&family=Varela+Round&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    @apply font-body text-ink antialiased;
+    min-height: 100vh;
+    /* Soft blue / lavender / peach gradient canvas (matches reference) */
+    background-color: #f5f3ff;
+    background-image:
+      radial-gradient(60rem 40rem at 12% -8%, rgba(129, 140, 248, 0.28), transparent 60%),
+      radial-gradient(52rem 36rem at 100% 0%, rgba(251, 207, 232, 0.35), transparent 55%),
+      radial-gradient(48rem 42rem at 88% 30%, rgba(147, 197, 253, 0.30), transparent 60%),
+      radial-gradient(60rem 50rem at 0% 100%, rgba(196, 181, 253, 0.25), transparent 60%);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/60 shadow-glass;
+  }
+  .glass-soft {
+    @apply bg-white/60 backdrop-blur-md border border-white/50;
+  }
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/70
+      px-4 py-2 text-sm font-semibold text-muted shadow-soft backdrop-blur
+      transition-colors duration-200 hover:bg-white hover:text-ink cursor-pointer;
+  }
+  .rail-btn {
+    @apply flex h-11 w-11 items-center justify-center rounded-2xl text-muted
+      transition-colors duration-200 hover:bg-white hover:text-primary cursor-pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
