@@ -1,3 +1,5 @@
+"use client";
+
 import {
   BotIcon,
   CompassIcon,
@@ -8,16 +10,20 @@ import {
   SearchIcon,
 } from "./icons";
 
-const NAV = [
-  { label: "Search", icon: SearchIcon },
-  { label: "Home", icon: HomeIcon },
-  { label: "Explore", icon: CompassIcon },
-  { label: "Documents", icon: FolderIcon },
-  { label: "History", icon: HistoryIcon },
-];
+interface SidebarProps {
+  onOpenDocuments?: () => void;
+}
 
 /** Left vertical icon rail (glassy), matching the reference layout. */
-export default function Sidebar() {
+export default function Sidebar({ onOpenDocuments }: SidebarProps) {
+  const nav = [
+    { label: "Search", icon: SearchIcon, onClick: undefined },
+    { label: "Home", icon: HomeIcon, onClick: undefined },
+    { label: "Explore", icon: CompassIcon, onClick: undefined },
+    { label: "Documents", icon: FolderIcon, onClick: onOpenDocuments },
+    { label: "History", icon: HistoryIcon, onClick: undefined },
+  ];
+
   return (
     <aside className="flex flex-col items-center gap-2 py-6">
       <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-secondary text-white shadow-rail">
@@ -25,8 +31,15 @@ export default function Sidebar() {
         <span className="sr-only">Agentic RAG</span>
       </div>
       <nav className="flex flex-col items-center gap-1">
-        {NAV.map(({ label, icon: Icon }) => (
-          <button key={label} type="button" className="rail-btn" aria-label={label} title={label}>
+        {nav.map(({ label, icon: Icon, onClick }) => (
+          <button
+            key={label}
+            type="button"
+            className="rail-btn"
+            aria-label={label}
+            title={label}
+            onClick={onClick}
+          >
             <Icon className="h-5 w-5" aria-hidden />
           </button>
         ))}

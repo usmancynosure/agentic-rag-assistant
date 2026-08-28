@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Composer from "@/components/Composer";
+import DocumentsPanel from "@/components/DocumentsPanel";
 import Sidebar from "@/components/Sidebar";
-import { BotIcon, FileIcon, ResearchIcon, SparkIcon } from "@/components/icons";
+import { BotIcon, FileIcon, FolderIcon, ResearchIcon, SparkIcon } from "@/components/icons";
 
 const CATEGORIES = [
   { label: "Documents", icon: FileIcon },
@@ -14,11 +15,14 @@ const CATEGORIES = [
 
 export default function Page() {
   const [verify, setVerify] = useState(true);
+  const [docsOpen, setDocsOpen] = useState(false);
 
   return (
     <main className="mx-auto flex min-h-screen max-w-[1400px] gap-3 p-4">
+      <DocumentsPanel open={docsOpen} onClose={() => setDocsOpen(false)} />
+
       <div className="glass-soft sticky top-4 hidden h-[calc(100vh-2rem)] rounded-4xl px-2 md:flex">
-        <Sidebar />
+        <Sidebar onOpenDocuments={() => setDocsOpen(true)} />
       </div>
 
       <section className="flex flex-1 flex-col">
@@ -27,13 +31,21 @@ export default function Page() {
             <BotIcon className="h-5 w-5 text-primary" aria-hidden />
             Agentic RAG · Opus 4.8
           </div>
-          <h1 className="hidden font-display text-lg text-ink sm:block">Knowledge Assistant</h1>
-          <a
-            href="https://github.com/usmancynosure/agentic-rag-assistant"
-            className="rounded-2xl bg-ink px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-          >
-            GitHub
-          </a>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setDocsOpen(true)}
+              className="glass flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-semibold text-ink transition-colors hover:text-primary cursor-pointer"
+            >
+              <FolderIcon className="h-5 w-5" aria-hidden /> Documents
+            </button>
+            <a
+              href="https://github.com/usmancynosure/agentic-rag-assistant"
+              className="rounded-2xl bg-ink px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+            >
+              GitHub
+            </a>
+          </div>
         </header>
 
         <div className="flex flex-1 flex-col items-center justify-center px-4">
