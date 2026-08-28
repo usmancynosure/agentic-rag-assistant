@@ -44,6 +44,10 @@ class Settings(BaseSettings):
     pinecone_cloud: str = "aws"
     pinecone_region: str = "us-east-1"
 
+    # --- Web search (Tavily) ---
+    tavily_api_key: str = ""
+    web_search_max_results: int = 5
+
     # --- Ingestion ---
     max_upload_mb: int = 25
     chunk_tokens: int = 512
