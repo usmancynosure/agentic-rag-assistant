@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Iterator
 
 from pydantic import BaseModel
 
-from app.services.llm import LLMClient
+from app.services.llm import LLMClient, StreamingLLMClient
 from app.services.retrieval.context import AssembledContext, ContextPassage
 
 INSUFFICIENT_EVIDENCE = (
@@ -63,6 +64,19 @@ def _extract_cited_indices(text: str) -> list[int]:
     return list(seen)
 
 
+def map_citations(text: str, context: AssembledContext) -> list[Citation]:
+    """Map ``[n]`` markers in ``text`` to real source passages.
+
+    Hallucinated / out-of-range indices are dropped.
+    """
+    by_index = {p.index: p for p in context.passages}
+    return [
+        Citation.from_passage(by_index[i])
+        for i in _extract_cited_indices(text)
+        if i in by_index
+    ]
+
+
 class Answerer:
     def __init__(self, *, llm: LLMClient, max_tokens: int) -> None:
         self._llm = llm
@@ -76,11 +90,17 @@ class Answerer:
         text = self._llm.generate(
             system=SYSTEM_PROMPT, prompt=prompt, max_tokens=self._max_tokens
         ).strip()
+        return GeneratedAnswer(answer=text, citations=map_citations(text, context))
 
-        by_index = {p.index: p for p in context.passages}
-        citations = [
-            Citation.from_passage(by_index[i])
-            for i in _extract_cited_indices(text)
-            if i in by_index  # drop hallucinated / out-of-range markers
-        ]
-        return GeneratedAnswer(answer=text, citations=citations)
+    def stream(self, *, question: str, context: AssembledContext) -> Iterator[str]:
+        """Yield answer tokens. Requires a streaming-capable LLM client."""
+        if context.is_empty:
+            yield INSUFFICIENT_EVIDENCE
+            return
+        if not isinstance(self._llm, StreamingLLMClient):
+            raise TypeError("LLM client does not support streaming")
+
+        prompt = build_user_prompt(question, context.to_prompt_block())
+        yield from self._llm.stream(
+            system=SYSTEM_PROMPT, prompt=prompt, max_tokens=self._max_tokens
+        )

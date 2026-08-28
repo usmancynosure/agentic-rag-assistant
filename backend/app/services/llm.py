@@ -8,6 +8,7 @@ neither an API key nor the SDK.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from typing import Any, Protocol, runtime_checkable
 
 from app.core.logging import get_logger
@@ -18,6 +19,11 @@ logger = get_logger(__name__)
 @runtime_checkable
 class LLMClient(Protocol):
     def generate(self, *, system: str, prompt: str, max_tokens: int) -> str: ...
+
+
+@runtime_checkable
+class StreamingLLMClient(LLMClient, Protocol):
+    def stream(self, *, system: str, prompt: str, max_tokens: int) -> Iterator[str]: ...
 
 
 class AnthropicLLM:
@@ -46,3 +52,13 @@ class AnthropicLLM:
         )
         logger.info("llm_generate", model=self._model, chars=len(text))
         return text
+
+    def stream(self, *, system: str, prompt: str, max_tokens: int) -> Iterator[str]:
+        with self._get_client().messages.stream(
+            model=self._model,
+            max_tokens=max_tokens,
+            system=system,
+            thinking={"type": "adaptive"},
+            messages=[{"role": "user", "content": prompt}],
+        ) as stream:
+            yield from stream.text_stream

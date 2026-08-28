@@ -41,17 +41,19 @@ Each phase is independently shippable, testable, and demoable. A phase is "done"
 
 ---
 
-## Phase 2 — Retrieval RAG
+## Phase 2 — Retrieval RAG ✅
 
 **Goal:** answer a question grounded in the corpus, with citations.
 
-- [ ] `POST /query` (non-agentic baseline)
-- [ ] Query embedding → Pinecone top-k with metadata filters
-- [ ] Context assembly: dedupe, rerank, token-budget packing
-- [ ] Answer generation with Claude + citation-enforcing prompt
-- [ ] Response schema: `answer`, `citations[]`, `usage`
-- [ ] Streaming variant (`/query/stream`)
-- [ ] Tests: retrieval ranking, citation extraction, prompt contract
+- [x] `POST /query` (non-agentic baseline) *(2c)*
+- [x] Query embedding → Pinecone top-k with metadata filters *(2c)*
+- [x] Context assembly: dedupe, rerank, token-budget packing *(2a)*
+- [x] Answer generation with Claude + citation-enforcing prompt *(2b)*
+- [x] Response schema: `answer`, `citations[]`, `sources[]` *(2c)*
+- [x] Streaming variant (`/query/stream`, SSE) *(2d)*
+- [x] Tests: context, citation extraction, prompt contract, query + stream APIs
+
+**Delivered as chunks:** 2a context assembly · 2b answerer + LLM client · 2c query API · 2d streaming SSE.
 
 **Demo:** ask a question, get an answer that cites the uploaded doc.
 
