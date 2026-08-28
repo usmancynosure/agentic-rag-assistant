@@ -26,7 +26,7 @@ class CitationOut(BaseModel):
     url: str | None = None
 
     @classmethod
-    def from_citation(cls, c: Citation) -> "CitationOut":
+    def from_citation(cls, c: Citation) -> CitationOut:
         return cls(
             index=c.index,
             chunk_id=c.chunk_id,
@@ -50,7 +50,7 @@ class SourceOut(BaseModel):
     url: str | None = None
 
     @classmethod
-    def from_passage(cls, p: ContextPassage) -> "SourceOut":
+    def from_passage(cls, p: ContextPassage) -> SourceOut:
         snippet = p.text if len(p.text) <= _SNIPPET_CHARS else p.text[:_SNIPPET_CHARS] + "…"
         return cls(
             index=p.index,

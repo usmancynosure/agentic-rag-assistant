@@ -39,7 +39,7 @@ class Citation(BaseModel):
     url: str | None = None
 
     @classmethod
-    def from_passage(cls, p: ContextPassage) -> "Citation":
+    def from_passage(cls, p: ContextPassage) -> Citation:
         return cls(
             index=p.index,
             chunk_id=p.chunk_id,

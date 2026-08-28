@@ -83,7 +83,8 @@ def chunk_document(
         buffer_tokens = 0
         overlap_text = ""  # carried tail from the previous chunk on this page
 
-        def flush() -> None:
+        # Bind the page number per iteration (flush is a closure over the loop).
+        def flush(page_number: int | None = page.page) -> None:
             nonlocal ordinal, overlap_text, buffer, buffer_tokens
             if not buffer:
                 return
@@ -98,7 +99,7 @@ def chunk_document(
                     metadata=ChunkMetadata(
                         document_id=document_id,
                         filename=filename,
-                        page=page.page,
+                        page=page_number,
                         start_char=buffer[0].start,
                         end_char=buffer[-1].end,
                     ),

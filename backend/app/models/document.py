@@ -10,7 +10,7 @@ from __future__ import annotations
 import hashlib
 import uuid
 from datetime import UTC, datetime
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
@@ -24,7 +24,7 @@ def _utcnow() -> datetime:
     return datetime.now(UTC)
 
 
-class DocumentStatus(str, Enum):
+class DocumentStatus(StrEnum):
     PENDING = "pending"
     PROCESSING = "processing"
     READY = "ready"

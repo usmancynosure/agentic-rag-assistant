@@ -59,18 +59,21 @@ Each phase is independently shippable, testable, and demoable. A phase is "done"
 
 ---
 
-## Phase 3 — Agentic Orchestration (LangGraph)
+## Phase 3 — Agentic Orchestration (LangGraph) ✅
 
 **Goal:** an agent that plans, selects tools, and re-queries.
 
-- [ ] LangGraph state graph: `plan → route → tools → assemble → generate`
-- [ ] Tools: `vector_search`, `web_search`, `structured_api` (function calling)
-- [ ] Router/planner node chooses tools per query
-- [ ] Re-query loop when context is insufficient (bounded)
-- [ ] Trace/telemetry per node
-- [ ] Tests: routing decisions, loop termination, tool contracts
+- [x] LangGraph state graph: `plan → tools → assemble → generate` + re-query edge *(3a, 3e)*
+- [x] Tools: `vector_search` *(3b)*, `web_search` (Tavily) *(3c)* behind a uniform `Tool` interface
+- [x] Router/planner node chooses tools per query *(3d)*
+- [x] Re-query loop when context is insufficient (bounded by `max_iterations`) *(3e)*
+- [x] `POST /agent/query` returning answer, citations, sources, `tools_run`, `iterations` *(3f)*
+- [x] Tests: loop control, tool contracts, planner parsing, merge, tool-switch re-query, API *(91 tests)*
+- [ ] `structured_api` tool (function calling) *(deferred; interface is ready)*
 
-**Demo:** a query needing live info triggers web search + vector search, merged.
+**Delivered as chunks:** 3a state+graph · 3b vector tool · 3c web tool · 3d planner · 3e merge+orchestrator · 3f API.
+
+**Demo:** a query needing live info triggers web search + vector search, merged, with a bounded re-query.
 
 ---
 

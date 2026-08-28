@@ -27,16 +27,16 @@ def test_satisfies_tool_protocol() -> None:
 def test_run_maps_results_to_web_evidence() -> None:
     client = FakeTavily(
         [
-            {"title": "Paris", "url": "https://ex.com/paris", "content": "Paris info", "score": 0.8},
-            {"title": "France", "url": "https://ex.com/fr", "content": "France info", "score": 0.6},
+            {"title": "Paris", "url": "https://ex.com/p", "content": "Paris info", "score": 0.8},
+            {"title": "France", "url": "https://ex.com/fr", "content": "Fr info", "score": 0.6},
         ]
     )
     tool = TavilySearchTool(api_key="k", max_results=5, client=client)
     ev = tool.run("capital of France")
 
     assert [e.origin for e in ev] == ["web", "web"]
-    assert ev[0].url == "https://ex.com/paris"
-    assert ev[0].source_id == "https://ex.com/paris"
+    assert ev[0].url == "https://ex.com/p"
+    assert ev[0].source_id == "https://ex.com/p"
     assert ev[0].title == "Paris"
     assert ev[0].text == "Paris info"
     assert client.last["max_results"] == 5

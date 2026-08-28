@@ -26,7 +26,7 @@ class DocumentOut(BaseModel):
     created_at: datetime
 
     @classmethod
-    def from_model(cls, doc: Document) -> "DocumentOut":
+    def from_model(cls, doc: Document) -> DocumentOut:
         return cls(
             id=doc.id,
             filename=doc.filename,

@@ -9,6 +9,11 @@ from __future__ import annotations
 
 from functools import lru_cache
 
+from app.agent.nodes.planner import Planner
+from app.agent.orchestrator import AgentOrchestrator
+from app.agent.tools.base import Tool
+from app.agent.tools.vector_search import VectorSearchTool
+from app.agent.tools.web_search import TavilySearchTool
 from app.core.config import Settings, get_settings
 from app.services.document_store import DocumentStore
 from app.services.ingestion.embeddings import Embedder, VoyageEmbeddings
@@ -65,6 +70,32 @@ def get_query_service() -> QueryService:
     return QueryService(
         embedder=get_embedder(),
         vector_store=get_vector_store(),
+        answerer=get_answerer(),
+        settings=get_settings(),
+    )
+
+
+@lru_cache
+def get_tools() -> list[Tool]:
+    s: Settings = get_settings()
+    return [
+        VectorSearchTool(
+            embedder=get_embedder(),
+            vector_store=get_vector_store(),
+            top_k=s.retrieval_top_k,
+        ),
+        TavilySearchTool(api_key=s.tavily_api_key, max_results=s.web_search_max_results),
+    ]
+
+
+def get_planner() -> Planner:
+    return Planner(llm=get_llm())
+
+
+def get_orchestrator() -> AgentOrchestrator:
+    return AgentOrchestrator(
+        planner=get_planner(),
+        tools=get_tools(),
         answerer=get_answerer(),
         settings=get_settings(),
     )
